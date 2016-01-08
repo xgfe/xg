@@ -4,7 +4,10 @@
   "description": "Front-end Integrated Solution for xgfe based on Fis3",
   "main": "index.js",
   "scripts": {
-    "test": "npm run test"
+    "start": "xg [server|release]"
+  },
+  "bin": {
+    "xg": "./bin/xg"
   },
   "repository": {
     "type": "git",
@@ -12,7 +15,8 @@
   },
   "keywords": [
     "fis3",
-    "xgfe"
+    "xgfe",
+    "xg"
   ],
   "author": "xgfe",
   "license": "MIT",
@@ -22,7 +26,12 @@
   "homepage": "https://github.com/xgfe/xg#readme",
   "devDependencies": {},
   "dependencies": {
-    "colors": "^1.1.2",
-    "x256": "0.0.2"
+    "fis3": "^3.3.6",
+    "fis3-hook-amd": "^0.1.13",
+    "fis3-packager-deps-pack": "^0.0.1",
+    "liftoff": "^2.2.0",
+    "minimist": "^1.2.0",
+    "x256": "0.0.2",
+    "xg-server-node": "^0.0.1"
   }
 }

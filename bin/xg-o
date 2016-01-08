@@ -1,0 +1,27 @@
+#!/usr/bin/env node
+
+/**
+ * Module dependencies.
+ */
+
+var xg = require('commander');
+var logo = require('../lib/logo.js');
+var xgInfo = require('../package.json');
+
+// 打印xg logo
+xg.on('version', function() {
+    logo.logLogo();
+});
+
+xg.version(xgInfo.version);
+
+// commands
+xg.command('server <command> [options]', 'launch a server')
+    .action(function () {
+        console.log(1111);
+        process.exit(0);
+
+    })
+    .command('release [media name]', 'build and deploy your project');
+
+xg.parse(process.argv);
