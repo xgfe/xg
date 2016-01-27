@@ -4,7 +4,8 @@
   "description": "Front-end Integrated Solution for xgfe based on Fis3",
   "main": "index.js",
   "scripts": {
-    "start": "xg [server|release]"
+    "start": "xg [server|release]",
+    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -w"
   },
   "bin": {
     "xg": "./bin/xg"
@@ -24,7 +25,9 @@
     "url": "https://github.com/xgfe/xg/issues"
   },
   "homepage": "https://github.com/xgfe/xg#readme",
-  "devDependencies": {},
+  "devDependencies": {
+    "cz-conventional-changelog": "^1.1.5"
+  },
   "dependencies": {
     "fis3": "^3.3.6",
     "fis3-hook-amd": "^0.1.13",
@@ -33,5 +36,10 @@
     "minimist": "^1.2.0",
     "x256": "0.0.2",
     "xg-server-node": "^0.0.1"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
   }
 }
