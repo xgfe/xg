@@ -32,16 +32,12 @@ fis.cli.version = function () {
     console.log('  v' + fis.cli.info.version + '\n');
 };
 
-if (xgconfig.type) {
+// release help信息: xg release -h
+var release = fis.require('command', 'release');
 
+if (xgconfig.type) {
     // 初始化配置文件
     XG_CONFIGS[xgconfig.type]();
-
-    // release help信息: xg release -h
-    var release = fis.require('command', 'release');
-    release.name += '\n\n Media name'
-        + '\n   pre:                      release to xg-server with optimize for finally confirmation'
-        + '\n   pub:                      release to ../dist with optimize for online usage';
 }
 
 
@@ -51,6 +47,13 @@ release.run = function (argv, cli, env) {
     if (!argv.h && !argv.help && !xgconfig.type) {
         fis.log.error('Release must run in the folder containing a .xgconfig file!');
         return ;
+    }
+    
+    // 增加release mediaType 说明
+    if (argv.h || argv.help) {
+        release.name += '\n\n Media name'
+            + '\n   pre:                      release to xg-server with optimize for finally confirmation'
+            + '\n   pub:                      release to ../dist with optimize for online usage';
     }
 
     release.fisRun.apply(release, arguments);

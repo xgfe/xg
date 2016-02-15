@@ -94,7 +94,26 @@ exports.config = function() {
      */
 
     function setPublish(mediaFis) {
-        return mediaFis.hook('amd')
+        return mediaFis
+            // 文件压缩
+            .match('**.js', {
+                // fis-optimizer-uglify-js 插件进行压缩，已内置
+                optimizer: fis.plugin('uglify-js', {
+                    compress : {
+                        drop_console: true,
+                        drop_debugger: true
+                    }
+                })
+            })
+            .match('**.css', {
+                // fis-optimizer-clean-css 插件进行压缩，已内置
+                optimizer: fis.plugin('clean-css')
+            })
+            .match('**.png', {
+                // fis-optimizer-png-compressor 插件进行压缩，已内置
+                optimizer: fis.plugin('png-compressor')
+            })
+            .hook('amd')
             .match('/app/(**).js', {
                 isMod: true,
                 moduleId: '$1'
@@ -103,8 +122,14 @@ exports.config = function() {
                 isMod: false
             })
             .match('/lib/**', {
-                skipDepsAnalysis: true
+                skipDepsAnalysis: true,
+                optimizer: null
             })
+            // .match('/app/lib.js', {
+            //     skipDepsAnalysis: true,
+            //     isMod: false,
+            //     optimizer: null
+            // })
             .match('/app/Modules/(**).js', {
                 isMod: true,
                 moduleId: '$1'
@@ -122,19 +147,6 @@ exports.config = function() {
 
                     return content;
                 }
-            })
-            // 文件压缩
-            .match('/app/**.js', {
-                // fis-optimizer-uglify-js 插件进行压缩，已内置
-                optimizer: fis.plugin('uglify-js')
-            })
-            .match('/{app,common}/**.css', {
-                // fis-optimizer-clean-css 插件进行压缩，已内置
-                optimizer: fis.plugin('clean-css')
-            })
-            .match('/{app,common}/**.png', {
-                // fis-optimizer-png-compressor 插件进行压缩，已内置
-                optimizer: fis.plugin('png-compressor')
             })
             .match('transpond-config.js', {
                 release: false
