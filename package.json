@@ -35,7 +35,9 @@
     "liftoff": "^2.2.0",
     "minimist": "^1.2.0",
     "x256": "0.0.2",
-    "xg-server-node": "^0.0.2"
+    "xg-command-lint": "^1.0.0",
+    "xg-server-node": "^0.0.2",
+    "lint-plus": "^0.4.0"
   },
   "config": {
     "commitizen": {

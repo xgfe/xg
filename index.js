@@ -40,6 +40,14 @@ if (xgconfig.type) {
     XG_CONFIGS[xgconfig.type]();
 }
 
+// add lint commands
+var currentMedia = fis.get('modules.commands', []);
+// [init', 'install', 'release', 'server', 'inspect']
+currentMedia.splice(2, 0, 'lint');
+// [init', 'install', 'lint', 'release', 'server', 'inspect']
+
+fis.set('modules.commands', currentMedia);
+
 
 // release 配置文件监测
 release.fisRun = release.run;
