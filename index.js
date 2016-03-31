@@ -52,7 +52,7 @@ fis.set('modules.commands', currentMedia);
 // release 配置文件监测
 release.fisRun = release.run;
 release.run = function (argv, cli, env) {
-    if (!argv.h && !argv.help && !xgconfig.type) { 
+    if (!argv.h && !argv.help && !xgconfig.type) {
         fis.log.error('Release must run in the folder containing a .xgconfig file!');
         return ;
     }
