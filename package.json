@@ -1,6 +1,6 @@
 {
   "name": "xg",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Front-end Integrated Solution for xgfe based on Fis3",
   "main": "index.js",
   "scripts": {
@@ -39,7 +39,7 @@
     "x256": "0.0.2",
     "xg-command-lint": "^1.0.1",
     "xg-server-node": "^0.0.2",
-    "colors": "^0.6.2"
+    "colors": "^1.1.2"
   },
   "config": {
     "commitizen": {
