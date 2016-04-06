@@ -33,11 +33,12 @@
     "fis3-hook-amd": "^0.1.13",
     "fis3-packager-deps-pack": "^0.0.1",
     "liftoff": "^2.2.0",
+    "lint-plus": "^0.5.1",
     "minimist": "^1.2.0",
+    "node-notifier": "^4.5.0",
     "x256": "0.0.2",
-    "xg-command-lint": "^1.0.0",
-    "xg-server-node": "^0.0.2",
-    "lint-plus": "^0.4.0"
+    "xg-command-lint": "^1.0.1",
+    "xg-server-node": "^0.0.2"
   },
   "config": {
     "commitizen": {

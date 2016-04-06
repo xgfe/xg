@@ -1,3 +1,9 @@
+var prevPrepackageTime = 0;
+var path = require('path');
+var colors = require('colors');
+var linter = require('lint-plus');
+var notifier = require('node-notifier');
+
 exports.config = function() {
 
     fis.set('project.ignore', [
@@ -12,6 +18,7 @@ exports.config = function() {
                 // ret.ids 所有源码列表，结构是 {'<id>': <File 对象>}
                 // ret.map 如果是 spriter、postpackager 这时候已经能得到打包结果了，
                 //         可以修改静态资源列表或者其他
+                prevPrepackageTime = new Date();
                 var timestamp = new Date().getTime().toString().substr(0, 10);
                 var srcs = ret.src || {};
                 fis.util.map(srcs, function(src, file) {
@@ -33,9 +40,57 @@ exports.config = function() {
                     'common/css/style.css'
                 ]
             })
-        })
-        .match('/{app,common}/(**)', {
+        }).match('/{app,common}/(**)', {
             release: '/assets/$1$2'
+        }).match('**.{css,html,js}', {
+            lint: function(content, file, conf) {
+                // 判断从上次发布后是否修改
+                if (fis.util.mtime(file.fullname) > prevPrepackageTime) {
+                    var results = linter.checkSync([file.fullname]);
+                    for (var filepath in results) {
+
+                        fis.log.warn(
+                            '%s (%s message%s)',
+                            colors.yellow(filepath.replace(fis.project.getProjectPath(), '')),
+                            results[filepath].length,
+                            results[filepath].length>1?'s':''
+                        );
+
+                        // 增量发布时给出消息提示
+                        if (prevPrepackageTime) {
+                            notifier.notify({
+                                title: filepath.replace(fis.project.getProjectPath(), ''),
+                                message: results[filepath].length + ' notices! Please check in terminal!',
+                                icon: path.join(__dirname, '../res/logo.png'),
+                                sound: true
+                            });
+                        }
+
+                        results[filepath].forEach(function (message) {
+                            var type = (function () {
+                                var temp = message.severity;
+                                if(temp === 2){
+                                    return colors.red("ERROR");
+                                }
+                                if(temp === 1){
+                                    return colors.yellow('WARN ');
+                                }
+                                return colors.green('INFO ');
+                            })();
+                            console.log(
+                                '     %s line %s, col %s: %s  %s',
+                                type,
+                                message.line,
+                                message.col,
+                                message.message,
+                                colors.gray(message.rule)
+                            );
+                        });
+                    }
+                }
+            }
+        }).match('/lib/**', {
+            lint: null
         });
 
 
