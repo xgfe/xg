@@ -6,7 +6,7 @@ var logo = require('./lib/logo.js');
 var XG_CONFIGS = {
     angular: require('./config/fis-conf-angular.js').config,
     vue: require('./config/fis-conf-vue.js').config
-}
+};
 
 
 fis.require.prefixes.unshift('xg');
@@ -61,7 +61,7 @@ release.run = function (argv, cli, env) {
     if (argv.h || argv.help) {
         release.name += '\n\n Media name'
             + '\n   pre:                      release to xg-server with optimize for finally confirmation'
-            + '\n   pub:                      release to ../dist with optimize for online usage';
+            + '\n   pub:                      release to ./dist with optimize for online usage';
     }
 
     release.fisRun.apply(release, arguments);

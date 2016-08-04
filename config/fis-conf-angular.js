@@ -7,10 +7,9 @@ var notifier = require('node-notifier');
 exports.config = function() {
 
     fis.set('project.ignore', [
-        'doc/**',
-        '.bowerrc',
-        'fis-conf.js'
+        'src/doc/**'
     ])
+        .set('project.files', ['src/**'])
         /* 对css文件需要依赖打包 */
         .match('::package', {
             prepackager: function (ret, conf, settings, opt) {
@@ -22,12 +21,12 @@ exports.config = function() {
                 var timestamp = new Date().getTime().toString().substr(0, 10);
                 var srcs = ret.src || {};
                 fis.util.map(srcs, function(src, file) {
-                    if (src.match(/^\/index.html/)) {
+                    if (src.match(/^\/src\/index.html/)) {
                         file.setContent(
                             file.getContent().replace(/\$\{__maintimestamp__\}/g, '?' + timestamp)
                         );
                     }
-                    if (!src.match(/^\/lib/) && src.match(/\.(html|js)$/)) {
+                    if (!src.match(/^\/src\/lib/) && src.match(/\.(html|js)$/)) {
                         file.setContent(
                             file.getContent().replace(/\$\{__timestamp__\}/g, timestamp)
                         );
@@ -36,13 +35,18 @@ exports.config = function() {
             },
             packager: fis.plugin('deps-pack', {
                 '/assets/css/style.css': [
-                    'common/css/style.css:deps',
-                    'common/css/style.css'
+                    'src/common/css/style.css:deps',
+                    'src/common/css/style.css'
                 ]
             })
-        }).match('/{app,common}/(**)', {
+        })
+        .match('src/(**)', {
+            release: '/$1'
+        })
+        .match('src/{app,common}/(**)', {
             release: '/assets/$1$2'
-        }).match('**.{css,html,js}', {
+        })
+        .match('**.{css,html,js}', {
             lint: function(content, file, conf) {
                 // 判断从上次发布后是否修改
                 if (fis.util.mtime(file.fullname) > prevPrepackageTime) {
@@ -89,7 +93,8 @@ exports.config = function() {
                     }
                 }
             }
-        }).match('/lib/**', {
+        })
+        .match('src/lib/**', {
             lint: null
         });
 
@@ -97,34 +102,34 @@ exports.config = function() {
     // 文件打包通用部分配置
     var pack_config = {
         '/assets/main.js': [
-            'app/app.js',
-            'app/appCtrl.js',
-            'app/appInit.js',
-            'app/main.js'
+            'src/app/app.js',
+            'src/app/appCtrl.js',
+            'src/app/appInit.js',
+            'src/app/main.js'
         ],
         '/assets/Directive/directives.js': [
-            'app/Directive/directives.js:deps',
-            'app/Directive/directives.js'
+            'src/app/Directive/directives.js:deps',
+            'src/app/Directive/directives.js'
         ],
         '/assets/Factory/factories.js': [
-            'app/Factory/factories.js:deps',
-            'app/Factory/factories.js'
+            'src/app/Factory/factories.js:deps',
+            'src/app/Factory/factories.js'
         ],
         '/assets/Filter/filters.js': [
-            'app/Filter/filters.js:deps',
-            'app/Filter/filters.js'
+            'src/app/Filter/filters.js:deps',
+            'src/app/Filter/filters.js'
         ],
         '/assets/Service/services.js': [
-            'app/Service/services.js:deps',
-            'app/Service/services.js'
+            'src/app/Service/services.js:deps',
+            'src/app/Service/services.js'
         ],
         '/assets/Router/routers.js': [
-            'app/Router/routers.js:deps',
-            'app/Router/routers.js'
+            'src/app/Router/routers.js:deps',
+            'src/app/Router/routers.js'
         ],
         '/assets/css/style.css': [
-            'common/css/style.css:deps',
-            'common/css/style.css'
+            'src/common/css/style.css:deps',
+            'src/common/css/style.css'
         ]
     };
 
@@ -138,9 +143,12 @@ exports.config = function() {
      发布配置，文件的打包，压缩只有在发布时才进行
      ========================================================================== */
     setPublish(fis.media('pub'))
+        .match('src/transpond-config.js', {
+            release: false
+        })
         .match('*', {
             deploy: fis.plugin('local-deliver', {
-                to: '../dist'
+                to: './dist'
             })
         });
 
@@ -169,14 +177,14 @@ exports.config = function() {
                 optimizer: fis.plugin('png-compressor')
             })
             .hook('amd')
-            .match('/app/(**).js', {
+            .match('src/app/(**).js', {
                 isMod: true,
                 moduleId: '$1'
             })
-            .match('/app/main.js', {
+            .match('src/app/main.js', {
                 isMod: false
             })
-            .match('/lib/**', {
+            .match('src/lib/**', {
                 skipDepsAnalysis: true,
                 optimizer: null
             })
@@ -185,14 +193,14 @@ exports.config = function() {
             //     isMod: false,
             //     optimizer: null
             // })
-            .match('/app/Modules/(**).js', {
+            .match('src/app/Modules/(**).js', {
                 isMod: true,
                 moduleId: '$1'
             })
             .match('::package', {
                 packager: fis.plugin('deps-pack', pack_config)
             })
-            .match('/app/Modules/**Ctrl.js', {
+            .match('src/app/Modules/**Ctrl.js', {
                 // 直接设置插件属性的值为插件处理逻辑
                 postprocessor: function (content, file, settings) {
                     pack_config[file.release] = [
@@ -202,9 +210,6 @@ exports.config = function() {
 
                     return content;
                 }
-            })
-            .match('transpond-config.js', {
-                release: false
             });
     }
 }
