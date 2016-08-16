@@ -1,11 +1,11 @@
 {
   "name": "xg",
-  "version": "0.1.4",
+  "version": "0.1.7",
   "description": "Front-end Integrated Solution for xgfe based on Fis3",
   "main": "index.js",
   "scripts": {
     "start": "xg [server|release]",
-    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -w"
+    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s"
   },
   "bin": {
     "xg": "./bin/xg"
@@ -30,15 +30,15 @@
   },
   "dependencies": {
     "fis3": "^3.3.6",
-    "fis3-hook-amd": "^0.1.13",
-    "fis3-packager-deps-pack": "^0.0.1",
+    "fis3-hook-amd": "^0.2.0",
+    "fis3-packager-deps-pack": "^0.1.2",
     "liftoff": "^2.2.0",
     "lint-plus": "^0.6.5",
     "minimist": "^1.2.0",
     "node-notifier": "^4.5.0",
     "x256": "0.0.2",
     "xg-command-lint": "^1.0.4",
-    "xg-server-node": "^0.0.2",
+    "xg-server-node": "^1.0.0",
     "colors": "^1.1.2"
   },
   "config": {

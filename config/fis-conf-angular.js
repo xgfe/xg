@@ -5,6 +5,8 @@ var linter = require('lint-plus');
 var notifier = require('node-notifier');
 
 exports.config = function() {
+    // 启动时默认清除缓存
+    fis.compile.clean();
 
     fis.set('project.ignore', [
         'src/doc/**'
@@ -39,6 +41,13 @@ exports.config = function() {
                     'src/common/css/style.css'
                 ]
             })
+        })
+        .match('src/app/require.config.json', {
+            parser: function (content, file, settings) {
+                var requireConfig =  JSON.parse(content);
+
+                return content.replace(requireConfig.baseUrl, requireConfig.releaseBaseUrl);
+            }
         })
         .match('src/(**)', {
             release: '/$1'
@@ -101,31 +110,14 @@ exports.config = function() {
 
     // 文件打包通用部分配置
     var pack_config = {
+        '/lib/libCombo.js': [
+            'src/lib/libCombo.js:deps',
+            'src/lib/libCombo.js'
+        ],
         '/assets/main.js': [
-            'src/app/app.js',
-            'src/app/appCtrl.js',
+            'src/app/appInit.js:deps',
             'src/app/appInit.js',
             'src/app/main.js'
-        ],
-        '/assets/Directive/directives.js': [
-            'src/app/Directive/directives.js:deps',
-            'src/app/Directive/directives.js'
-        ],
-        '/assets/Factory/factories.js': [
-            'src/app/Factory/factories.js:deps',
-            'src/app/Factory/factories.js'
-        ],
-        '/assets/Filter/filters.js': [
-            'src/app/Filter/filters.js:deps',
-            'src/app/Filter/filters.js'
-        ],
-        '/assets/Service/services.js': [
-            'src/app/Service/services.js:deps',
-            'src/app/Service/services.js'
-        ],
-        '/assets/Router/routers.js': [
-            'src/app/Router/routers.js:deps',
-            'src/app/Router/routers.js'
         ],
         '/assets/css/style.css': [
             'src/common/css/style.css:deps',
@@ -157,6 +149,21 @@ exports.config = function() {
      */
 
     function setPublish(mediaFis) {
+        var requireConfigPath = fis.xgconfig.requireConfig || '/src/app/require.config.json';
+        var requireConfig = fis.util.readJSON(path.join(process.cwd(), requireConfigPath));
+        var paths = requireConfig.paths || {};
+        var baseUrl = requireConfig.baseUrl || '';
+
+        mediaFis.hook('amd', requireConfig);
+
+        // 配置require config paths指定别名文件的module包装，为打包作准备
+        for (var key in paths) {
+            mediaFis.match(path.join(baseUrl, paths[key] + '.js'), {
+                isMod: true,
+                moduleId: key
+            });
+        }
+
         return mediaFis
             // 文件压缩
             .match('**.js', {
@@ -176,7 +183,6 @@ exports.config = function() {
                 // fis-optimizer-png-compressor 插件进行压缩，已内置
                 optimizer: fis.plugin('png-compressor')
             })
-            .hook('amd')
             .match('src/app/(**).js', {
                 isMod: true,
                 moduleId: '$1'
@@ -185,14 +191,8 @@ exports.config = function() {
                 isMod: false
             })
             .match('src/lib/**', {
-                skipDepsAnalysis: true,
                 optimizer: null
             })
-            // .match('/app/lib.js', {
-            //     skipDepsAnalysis: true,
-            //     isMod: false,
-            //     optimizer: null
-            // })
             .match('src/app/Modules/(**).js', {
                 isMod: true,
                 moduleId: '$1'

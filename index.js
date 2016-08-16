@@ -21,6 +21,9 @@ if (fs.existsSync(xgconfigPath)) {
     xgconfig = JSON.parse(fs.readFileSync(xgconfigPath));
 }
 
+// 全局挂载xgconfig
+fis.xgconfig = xgconfig;
+
 // 确定项目类型，默认为angular
 if (!xgconfig.type || !xgconfig.type in XG_CONFIGS) {
     xgconfig.type = null;
@@ -56,7 +59,7 @@ release.run = function (argv, cli, env) {
         fis.log.error('Release must run in the folder containing a .xgconfig file!');
         return ;
     }
-    
+
     // 增加release mediaType 说明
     if (argv.h || argv.help) {
         release.name += '\n\n Media name'
