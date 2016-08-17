@@ -1,3 +1,14 @@
+<a name="0.2.2"></a>
+## [0.2.2](https://github.com/xgfe/xg/compare/v0.2.0...v0.2.2) (2016-08-17)
+
+
+### Features
+
+* **libCombo:** forced excluded shim dependency from libCombo.js ([4206ae9](https://github.com/xgfe/xg/commit/4206ae9))
+* **xg:** add engines requirements ([548b229](https://github.com/xgfe/xg/commit/548b229))
+
+
+
 <a name="0.2.0"></a>
 # [0.2.0](https://github.com/xgfe/xg/compare/v0.1.2...v0.2.0) (2016-08-16)
 

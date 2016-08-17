@@ -1,6 +1,6 @@
 {
   "name": "xg",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Front-end Integrated Solution for xgfe based on Fis3",
   "main": "index.js",
   "scripts": {
