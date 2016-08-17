@@ -107,6 +107,14 @@ exports.config = function() {
             lint: null
         });
 
+    /**
+     * 正式发布的文件处理配置
+     */
+    var requireConfigPath = fis.xgconfig.requireConfig || '/src/app/require.config.json';
+    var requireConfig = fis.util.readJSON(path.join(process.cwd(), requireConfigPath));
+    var paths = requireConfig.paths || {};
+    var baseUrl = requireConfig.baseUrl || '';
+    var releaseBaseUrl = requireConfig.releaseBaseUrl || '';
 
     // 文件打包通用部分配置
     var pack_config = {
@@ -125,6 +133,30 @@ exports.config = function() {
         ]
     };
 
+    // forced exclued 'angular' and 'jquery' in libCombo, because they are always shim dependency
+    if (requireConfig.shim) {
+        for (var key in requireConfig.shim) {
+            var id = path.join(baseUrl, paths[key] + '.js');
+            var releaseId = path.join(releaseBaseUrl, paths[key] + '.js');;
+
+            if (pack_config[releaseId] && requireConfig.shim[key].deps) {
+                excluedShimDependency(pack_config[releaseId], requireConfig.shim[key].deps);
+            }
+        }
+    }
+
+    function excluedShimDependency(packArr, depsArr) {
+        for (var dep in depsArr) {
+
+            if (paths[depsArr[dep]]) {
+                packArr.push('!' + path.join(baseUrl, paths[depsArr[dep]] + '.js'));
+
+                if (requireConfig.shim[depsArr[dep]] && requireConfig.shim[depsArr[dep]].deps) {
+                    excluedShimDependency(packArr, requireConfig.shim[depsArr[dep]].deps);
+                }
+            }
+        }
+    }
 
     /* ==========================================================================
      预发布，本地采用正式发布时一样的发布配置
@@ -144,15 +176,8 @@ exports.config = function() {
             })
         });
 
-    /**
-     * 正式发布的文件处理配置
-     */
 
     function setPublish(mediaFis) {
-        var requireConfigPath = fis.xgconfig.requireConfig || '/src/app/require.config.json';
-        var requireConfig = fis.util.readJSON(path.join(process.cwd(), requireConfigPath));
-        var paths = requireConfig.paths || {};
-        var baseUrl = requireConfig.baseUrl || '';
 
         mediaFis.hook('amd', requireConfig);
 
@@ -197,9 +222,6 @@ exports.config = function() {
                 isMod: true,
                 moduleId: '$1'
             })
-            .match('::package', {
-                packager: fis.plugin('deps-pack', pack_config)
-            })
             .match('src/app/Modules/**Ctrl.js', {
                 // 直接设置插件属性的值为插件处理逻辑
                 postprocessor: function (content, file, settings) {
@@ -210,6 +232,9 @@ exports.config = function() {
 
                     return content;
                 }
+            })
+            .match('::package', {
+                packager: fis.plugin('deps-pack', pack_config)
             });
     }
 }
