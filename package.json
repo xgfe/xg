@@ -1,6 +1,6 @@
 {
   "name": "xg",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "Front-end Integrated Solution for xgfe based on Fis3",
   "main": "index.js",
   "scripts": {
@@ -47,6 +47,8 @@
       "path": "./node_modules/cz-conventional-changelog"
     }
   },
+  "engineStrict": true,
+  "engine-strict": true,
   "engines": {
     "node": ">=4.0.0",
     "npm": ">=3.0.0"
