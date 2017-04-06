@@ -1,6 +1,6 @@
 {
   "name": "xg",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "Front-end Integrated Solution for xgfe based on Fis3",
   "main": "index.js",
   "scripts": {
@@ -29,6 +29,8 @@
     "cz-conventional-changelog": "^1.1.5"
   },
   "dependencies": {
+    "colors": "^1.1.2",
+    "fis-parser-es6-babel6": "^0.1.0",
     "fis3": "^3.3.6",
     "fis3-hook-amd": "^0.2.0",
     "fis3-hook-commonjs": "^0.1.22",
@@ -39,8 +41,7 @@
     "node-notifier": "^4.5.0",
     "x256": "0.0.2",
     "xg-command-lint": "^1.0.4",
-    "xg-server-node": "^1.0.0",
-    "colors": "^1.1.2"
+    "xg-server-node": "^1.0.0"
   },
   "config": {
     "commitizen": {

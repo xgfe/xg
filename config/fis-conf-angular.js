@@ -4,13 +4,16 @@ var colors = require('colors');
 var linter = require('lint-plus');
 var notifier = require('node-notifier');
 
-exports.config = function() {
+var ES6_SUFFIX = 'es6';
+
+exports.config = function () {
     // 启动时默认清除缓存
     fis.compile.clean();
 
     fis.set('project.ignore', [
         'src/doc/**'
     ])
+        .set('project.fileType.text', ES6_SUFFIX)
         .set('project.files', ['src/**'])
         /* 对css文件需要依赖打包 */
         .match('::package', {
@@ -22,7 +25,7 @@ exports.config = function() {
                 prevPrepackageTime = new Date();
                 var timestamp = new Date().getTime().toString().substr(0, 10);
                 var srcs = ret.src || {};
-                fis.util.map(srcs, function(src, file) {
+                fis.util.map(srcs, function (src, file) {
                     if (src.match(/^\/src\/index.html/)) {
                         file.setContent(
                             file.getContent().replace(/\$\{__maintimestamp__\}/g, '?' + timestamp)
@@ -44,7 +47,7 @@ exports.config = function() {
         })
         .match('src/app/require.config.json', {
             parser: function (content, file, settings) {
-                var requireConfig =  JSON.parse(content);
+                var requireConfig = JSON.parse(content);
 
                 return content.replace(requireConfig.baseUrl, requireConfig.releaseBaseUrl);
             }
@@ -52,11 +55,15 @@ exports.config = function() {
         .match('src/(**)', {
             release: '/$1'
         })
+        .match('**.' + ES6_SUFFIX, {
+            rExt: '.js',
+            parser: fis.plugin('es6-babel6', {})
+        })
         .match('src/{app,common}/(**)', {
             release: '/assets/$1$2'
         })
-        .match('**.{css,html,js}', {
-            lint: function(content, file, conf) {
+        .match('**.{css,html,js,' + ES6_SUFFIX + '}', {
+            lint: function (content, file, conf) {
                 // 判断从上次发布后是否修改
                 if (fis.util.mtime(file.fullname) > prevPrepackageTime) {
                     var results = linter.checkSync([file.fullname]);
@@ -66,7 +73,7 @@ exports.config = function() {
                             '%s (%s message%s)',
                             colors.yellow(filepath.replace(fis.project.getProjectPath(), '')),
                             results[filepath].length,
-                            results[filepath].length>1?'s':''
+                            results[filepath].length > 1 ? 's' : ''
                         );
 
                         // 增量发布时给出消息提示
@@ -82,10 +89,10 @@ exports.config = function() {
                         results[filepath].forEach(function (message) {
                             var type = (function () {
                                 var temp = message.severity;
-                                if(temp === 2){
+                                if (temp === 2) {
                                     return colors.red("ERROR");
                                 }
-                                if(temp === 1){
+                                if (temp === 1) {
                                     return colors.yellow('WARN ');
                                 }
                                 return colors.green('INFO ');
@@ -137,7 +144,7 @@ exports.config = function() {
     if (requireConfig.shim) {
         for (var key in requireConfig.shim) {
             var id = path.join(baseUrl, paths[key] + '.js');
-            var releaseId = path.join(releaseBaseUrl, paths[key] + '.js');;
+            var releaseId = path.join(releaseBaseUrl, paths[key] + '.js');
 
             if (pack_config[releaseId] && requireConfig.shim[key].deps) {
                 excluedShimDependency(pack_config[releaseId], requireConfig.shim[key].deps);
@@ -176,7 +183,6 @@ exports.config = function() {
             })
         });
 
-
     function setPublish(mediaFis) {
 
         mediaFis.hook('amd', requireConfig);
@@ -190,11 +196,11 @@ exports.config = function() {
         }
 
         return mediaFis
-            // 文件压缩
-            .match('**.js', {
+        // 文件压缩
+            .match('**.{js,' + ES6_SUFFIX + '}', {
                 // fis-optimizer-uglify-js 插件进行压缩，已内置
                 optimizer: fis.plugin('uglify-js', {
-                    compress : {
+                    compress: {
                         drop_console: true,
                         drop_debugger: true
                     }
@@ -208,7 +214,7 @@ exports.config = function() {
                 // fis-optimizer-png-compressor 插件进行压缩，已内置
                 optimizer: fis.plugin('png-compressor')
             })
-            .match('src/app/(**).js', {
+            .match('src/app/(**).{js,' + ES6_SUFFIX + '}', {
                 isMod: true,
                 moduleId: '$1'
             })
@@ -218,15 +224,15 @@ exports.config = function() {
             .match('src/lib/**', {
                 optimizer: null
             })
-            .match('src/app/Modules/(**).js', {
+            .match('src/app/Modules/(**).{js,' + ES6_SUFFIX + '}', {
                 isMod: true,
                 moduleId: '$1'
             })
-            .match('src/app/Modules/**Ctrl.js', {
+            .match('src/app/Modules/**Ctrl.{js,' + ES6_SUFFIX + '}', {
                 // 直接设置插件属性的值为插件处理逻辑
                 postprocessor: function (content, file, settings) {
                     pack_config[file.release] = [
-                        file.id+':deps',
+                        file.id + ':deps',
                         file.id
                     ];
 
@@ -237,4 +243,4 @@ exports.config = function() {
                 packager: fis.plugin('deps-pack', pack_config)
             });
     }
-}
+};
