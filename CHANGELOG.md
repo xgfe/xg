@@ -1,3 +1,14 @@
+<a name="0.2.4"></a>
+## [0.2.4](https://github.com/xgfe/xg/compare/v0.2.2...v0.2.4) (2017-05-03)
+
+
+### Features
+
+* **angular:** add es6 syntax support ([368ed7d](https://github.com/xgfe/xg/commit/368ed7d))
+* **es6:** add es6 support ([3ac70a8](https://github.com/xgfe/xg/commit/3ac70a8))
+
+
+
 <a name="0.2.2"></a>
 ## [0.2.2](https://github.com/xgfe/xg/compare/v0.2.0...v0.2.2) (2016-08-17)
 
