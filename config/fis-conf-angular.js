@@ -4,6 +4,9 @@ var colors = require('colors');
 var linter = require('lint-plus');
 var notifier = require('node-notifier');
 
+var preset2015 = require('babel-preset-es2015');
+var presetstage2 = require('babel-preset-stage-2');
+
 var ES6_SUFFIX = 'es6';
 
 exports.config = function () {
@@ -59,11 +62,13 @@ exports.config = function () {
         .match('src/**.' + ES6_SUFFIX, {
             rExt: '.js',
             parser: fis.plugin('babel-6.x', {
+                presets: [preset2015, presetstage2],
                 sourceMaps: true
             })
         })
         .match('src/**.js', {
             parser: fis.plugin('babel-6.x', {
+                presets: [preset2015, presetstage2],
                 sourceMaps: true
             })
         })
