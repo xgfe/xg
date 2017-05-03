@@ -30,7 +30,7 @@
   },
   "dependencies": {
     "colors": "^1.1.2",
-    "fis-parser-es6-babel6": "^0.1.0",
+    "fis-parser-babel-6.x": "^6.20.0",
     "fis3": "^3.3.6",
     "fis3-hook-amd": "^0.2.0",
     "fis3-hook-commonjs": "^0.1.22",

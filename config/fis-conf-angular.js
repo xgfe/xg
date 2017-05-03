@@ -15,6 +15,7 @@ exports.config = function () {
     ])
         .set('project.fileType.text', ES6_SUFFIX)
         .set('project.files', ['src/**'])
+        .set("project.watch.usePolling", true)
         /* 对css文件需要依赖打包 */
         .match('::package', {
             prepackager: function (ret, conf, settings, opt) {
@@ -55,9 +56,16 @@ exports.config = function () {
         .match('src/(**)', {
             release: '/$1'
         })
-        .match('**.' + ES6_SUFFIX, {
+        .match('src/**.' + ES6_SUFFIX, {
             rExt: '.js',
-            parser: fis.plugin('es6-babel6', {})
+            parser: fis.plugin('babel-6.x', {
+                sourceMaps: true
+            })
+        })
+        .match('src/**.js', {
+            parser: fis.plugin('babel-6.x', {
+                sourceMaps: true
+            })
         })
         .match('src/{app,common}/(**)', {
             release: '/assets/$1$2'
@@ -111,7 +119,8 @@ exports.config = function () {
             }
         })
         .match('src/lib/**', {
-            lint: null
+            lint: null,
+            parser: null
         });
 
     /**
