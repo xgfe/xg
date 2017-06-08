@@ -3,9 +3,14 @@ var path = require('path');
 var colors = require('colors');
 var linter = require('lint-plus');
 var notifier = require('node-notifier');
+var fisParserDefineFun = require('../lib/fis3-parser-define');
+var fisParserDefine = function (content, file, conf) {
+    return fisParserDefineFun(content, file, fis.xgconfig.defines)
+};
+
 
 var preset2015 = require('babel-preset-es2015');
-var presetstage2 = require('babel-preset-stage-2');
+var presetstage2 = require('babel-preset-stage-2')
 
 var ES6_SUFFIX = 'es6';
 
@@ -61,16 +66,16 @@ exports.config = function () {
         })
         .match('src/**.' + ES6_SUFFIX, {
             rExt: '.js',
-            parser: fis.plugin('babel-6.x', {
+            parser: [fis.plugin('babel-6.x', {
                 presets: [preset2015, presetstage2],
                 sourceMaps: true
-            })
+            }), fisParserDefine]
         })
         .match('src/**.js', {
-            parser: fis.plugin('babel-6.x', {
+            parser: [fis.plugin('babel-6.x', {
                 presets: [preset2015, presetstage2],
                 sourceMaps: true
-            })
+            }), fisParserDefine]
         })
         .match('src/{app,common}/(**)', {
             release: '/assets/$1$2'

@@ -18,7 +18,11 @@ var xgconfigPath = path.resolve(process.cwd(), '.xgconfig');
 var xgconfig = {};
 
 if (fs.existsSync(xgconfigPath)) {
-    xgconfig = JSON.parse(fs.readFileSync(xgconfigPath));
+    try {
+        xgconfig = JSON.parse(fs.readFileSync(xgconfigPath));
+    } catch (e) {
+        xgconfig = require(xgconfigPath);
+    }
 }
 
 // 全局挂载xgconfig
