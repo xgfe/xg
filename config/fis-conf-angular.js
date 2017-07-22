@@ -23,7 +23,6 @@ exports.config = function () {
     ])
         .set('project.fileType.text', ES6_SUFFIX)
         .set('project.files', ['src/**'])
-        .set("project.watch.usePolling", true)
         /* 对css文件需要依赖打包 */
         .match('::package', {
             prepackager: function (ret, conf, settings, opt) {
