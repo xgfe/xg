@@ -39,7 +39,7 @@ exports.config = function () {
                             file.getContent().replace(/\$\{__maintimestamp__\}/g, '?' + timestamp)
                         );
                     }
-                    if (!src.match(/^\/src\/lib/) && src.match(/\.(html|js)$/)) {
+                    if (!src.match(/^\/src\/lib/) && src.match(/\.(html|js|json)$/)) {
                         file.setContent(
                             file.getContent().replace(/\$\{__timestamp__\}/g, timestamp)
                         );
