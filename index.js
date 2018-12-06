@@ -50,7 +50,7 @@ if (xgconfig.type) {
 // add lint commands
 var currentMedia = fis.get('modules.commands', []);
 // [init', 'install', 'release', 'server', 'inspect']
-currentMedia.splice(2, 0, 'lint', 'tag', 'freepack');
+currentMedia.splice(2, 0, 'lint', 'tag', 'freepack', 'kxcli');
 // [init', 'install', 'lint', 'tag', 'freepack', 'release', 'server', 'inspect']
 
 fis.set('modules.commands', currentMedia);
