@@ -26,7 +26,8 @@
   },
   "homepage": "https://github.com/xgfe/xg#readme",
   "devDependencies": {
-    "cz-conventional-changelog": "^1.1.5"
+    "cz-conventional-changelog": "^1.1.5",
+    "xg-command-kxcli": "^1.1.6"
   },
   "dependencies": {
     "babel-preset-stage-2": "^6.20.0",
@@ -45,7 +46,7 @@
     "xg-command-lint": "^1.0.4",
     "xg-command-tag": "^0.1.0",
     "xg-server-node": "^1.0.0",
-    "xg-command-kxcli": "^1.1.3"
+    "xg-command-kxcli": "^1.1.6"
   },
   "config": {
     "commitizen": {
