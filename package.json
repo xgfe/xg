@@ -44,7 +44,8 @@
     "xg-command-freepack": "0.x",
     "xg-command-lint": "^1.0.4",
     "xg-command-tag": "^0.1.0",
-    "xg-server-node": "^1.0.0"
+    "xg-server-node": "^1.0.0",
+    "xg-command-kxcli": "^1.1.6"
   },
   "config": {
     "commitizen": {
