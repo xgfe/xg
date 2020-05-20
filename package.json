@@ -8,7 +8,7 @@
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s"
   },
   "bin": {
-    "xg": "./bin/xg"
+    "lxg": "./bin/xg"
   },
   "repository": {
     "type": "git",

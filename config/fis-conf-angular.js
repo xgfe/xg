@@ -1,3 +1,4 @@
+var fs = require('fs');
 var prevPrepackageTime = 0;
 var path = require('path');
 var colors = require('colors');
@@ -14,15 +15,29 @@ var presetstage2 = require('babel-preset-stage-2')
 
 var ES6_SUFFIX = 'es6';
 
+let appPath = process.cwd() + '/src/app';
 exports.config = function () {
     // 启动时默认清除缓存
     fis.compile.clean();
 
     fis.set('project.ignore', [
-        'src/doc/**'
-    ])
+            'src/doc/**'
+        ])
         .set('project.fileType.text', ES6_SUFFIX)
-        .set('project.files', ['src/**'])
+        .set('project.files', [
+            ...fs.readdirSync(appPath)
+                .filter(v => v !== 'Modules')
+                .map(path => 
+                    fs.statSync(appPath + '/' + path).isDirectory() 
+                        ? ('src/app/' + path + '/**') : 'src/app/' + path),
+            ...fis.xgconfig.watchModules.map(v=>`src/app/Modules/${v}/**`),
+            'src/appDownload/**',
+            'src/common/**',
+            'src/global/**',
+            'src/lib/**',
+            'src/index.html',
+            'src/transpond-config.js'
+        ])
         /* 对css文件需要依赖打包 */
         .match('::package', {
             prepackager: function (ret, conf, settings, opt) {
@@ -214,7 +229,7 @@ exports.config = function () {
         }
 
         return mediaFis
-        // 文件压缩
+            // 文件压缩
             .match('**.{js,' + ES6_SUFFIX + '}', {
                 // fis-optimizer-uglify-js 插件进行压缩，已内置
                 optimizer: fis.plugin('uglify-js', {
