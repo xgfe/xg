@@ -20,8 +20,10 @@ cli.launch({
     configPath: argv.f || argv.file
 }, function(env) {
     var fis;
+    var watchModules = argv.m ? argv.m.split(',') : [''];
+    delete argv.m;
     if (!env.modulePath) {
-        fis = require('../');
+        fis = require('../')(watchModules);
     } else {
         fis = require(env.modulePath);
     }
