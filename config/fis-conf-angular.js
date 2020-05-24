@@ -22,7 +22,9 @@ exports.config = function (m) {
         fis.compile.clean();
 
         fis.set('project.ignore', [
-                'src/doc/**'
+                'src/doc/**',
+                'hybrid/**',
+                'node_modules/**'
             ])
             .set('project.fileType.text', ES6_SUFFIX)
             .set('project.files', [
