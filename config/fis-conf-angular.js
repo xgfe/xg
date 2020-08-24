@@ -24,7 +24,8 @@ exports.config = function (m) {
         fis.set('project.ignore', [
                 'src/doc/**',
                 'hybrid/**',
-                'node_modules/**'
+                'node_modules/**',
+                'main/**'
             ])
             .set('project.fileType.text', ES6_SUFFIX)
             .set('project.files', [
