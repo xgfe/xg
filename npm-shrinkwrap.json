@@ -1,6 +1,6 @@
 {
   "name": "xg",
-  "version": "0.5.3",
+  "version": "0.5.4",
   "lockfileVersion": 1,
   "requires": true,
   "dependencies": {
@@ -5729,7 +5729,7 @@
       }
     },
     "xg-server-node": {
-      "version": "1.0.4",
+      "version": "1.0.5",
       "requires": {
         "body-parser": "^1.14.1",
         "compression": "^1.6.1",

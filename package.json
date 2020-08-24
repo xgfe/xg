@@ -1,6 +1,6 @@
 {
   "name": "xg",
-  "version": "0.5.3",
+  "version": "0.5.4",
   "description": "Front-end Integrated Solution for xgfe based on Fis3",
   "main": "index.js",
   "scripts": {
@@ -44,7 +44,7 @@
     "xg-command-freepack": "0.x",
     "xg-command-lint": "^1.0.4",
     "xg-command-tag": "^0.1.0",
-    "xg-server-node": "^1.0.0"
+    "xg-server-node": "^1.0.5"
   },
   "config": {
     "commitizen": {
