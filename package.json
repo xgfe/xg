@@ -39,7 +39,7 @@
     "liftoff": "^2.2.0",
     "lint-plus": "^0.6.8",
     "minimist": "^1.2.0",
-    "node-notifier": "^4.5.0",
+    "node-notifier": "^8.0.1",
     "x256": "0.0.2",
     "xg-command-freepack": "0.x",
     "xg-command-lint": "^1.0.4",
